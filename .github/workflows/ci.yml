@@ -19,12 +19,15 @@ jobs:
 
       - name: Install npm Packages
         run: npm install
+        working-directory: frontend
 
       - name: Run Linter
         run: npm lint
+        working-directory: frontend
 
       - name: Run Tests
         run: npm test
+        working-directory: frontend
 
       - name: Docker setup [Login]
         uses: docker/login-action@v4
