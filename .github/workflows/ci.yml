@@ -40,5 +40,6 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           push: true
-          context: ./frontend/Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile
           tags: ${{ vars.DOCKER_USERNAME }}/devboard-frontend:latest
