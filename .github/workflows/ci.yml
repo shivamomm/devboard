@@ -29,6 +29,7 @@ jobs:
         run: npm test
         working-directory: frontend
 
+#Docker setup already comes in ubuntu latest
       - name: Docker setup [Login]
         uses: docker/login-action@v4
         with:
