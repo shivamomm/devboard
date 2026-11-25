@@ -81,7 +81,7 @@ jobs:
           file: ./backend/Dockerfile
           tags: ${{ vars.DOCKER_USERNAME }}/devboard-backend:latest
 
-  # deploy:
-  #   needs: [frontend, backend] 
-  #   uses: ./.github/workflows/cd.yml
-  #   secrets: inherit      
+  deploy:
+    needs: [frontend, backend] 
+    uses: ./.github/workflows/cd.yml
+    secrets: inherit      
