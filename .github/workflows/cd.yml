@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Code Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: copy example env to main env
         run: cp .env.example .env
