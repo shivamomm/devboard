@@ -20,7 +20,7 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Deploybteh containers with docker compose
+      - name: Deploy the containers with docker compose
         run: |
           docker compose pull
           docker compose up -d         
