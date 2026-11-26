@@ -1,11 +1,11 @@
 #ci.yml
-#Goal: To build and push docker image of devboard forntend in Docker Hub
-name: ci
+#Goal: To build and push docker image of devboard frontend in Docker Hub
+name: CI
 on:
   push:
     branches: [master]
 jobs:
-  build-and-push:
+  build-and-push-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout/clone the code
@@ -24,3 +24,22 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ vars.DOCKER_USERNAME }}/devboard-fe-master:latest
+  build-and-push-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout/clone the code
+        uses: actions/checkout@v7
+
+      - name: Docker setup [Login]
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push backend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ vars.DOCKER_USERNAME }}/devboard-be-master:latest
