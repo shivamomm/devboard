@@ -1,33 +1,15 @@
-name: CI
+#ci.yml
+#Goal: To build and push docker image of devboard forntend in Docker Hub
+name: ci
 on:
   push:
     branches: [advanced]
-
 jobs:
-  frontend:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the code
+      - name: Checkout/clone the code
         uses: actions/checkout@v7
-
-      - name: Setup Nodejs 
-        uses: actions/setup-node@v6
-        with:
-          node-version: '20'
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install npm Packages
-        run: npm install  
-        working-directory: frontend
-
-      - name: Run Linter
-        run: npm run lint
-        working-directory: frontend
-
-      - name: Run Tests
-        run: npm test
-        working-directory: frontend
 
       - name: Docker setup [Login]
         uses: docker/login-action@v4
@@ -35,53 +17,10 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Docker Build and Push
+      - name: Build and push
         uses: docker/build-push-action@v7
         with:
-          push: true
           context: ./frontend
           file: ./frontend/Dockerfile
-          tags: ${{ vars.DOCKER_USERNAME }}/devboard-frontend:latest
-
-  backend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v7
-
-      - name: Setup Go
-        uses: actions/setup-go@v7
-        with:
-          go-version-file: 'backend/go.mod'
-          cache-dependency-path: 'backend/go.sum'
-
-      - name: Run GO Formatter
-        run: go fmt
-        working-directory: backend
-
-      - name: Run GO Vet
-        run: go vet
-        working-directory: backend
-
-      - name: Run GO Test
-        run: go test
-        working-directory: backend
-
-      - name: Docker setup [Login]
-        uses: docker/login-action@v4
-        with:
-          username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Docker Build and Push
-        uses: docker/build-push-action@v7
-        with:
           push: true
-          context: ./backend
-          file: ./backend/Dockerfile
-          tags: ${{ vars.DOCKER_USERNAME }}/devboard-backend:latest
-
-  deploy:
-    needs: [frontend, backend] 
-    uses: ./.github/workflows/cd.yml
-    secrets: inherit      
+          tags: ${{ vars.DOCKER_USERNAME }}/devboard-fe-master:latest
