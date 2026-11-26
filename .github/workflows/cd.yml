@@ -1,0 +1,26 @@
+name: CD
+on:
+  workflow_call: 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: copy example env to main env
+        run: cp .env.example .env
+
+      - name: Docker setup [Login]
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Deploy the containers with docker compose
+        run: |
+          docker compose pull
+          docker compose up -d         
