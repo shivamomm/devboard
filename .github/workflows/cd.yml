@@ -11,7 +11,7 @@ on:
 jobs:
     deploy:
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        runs-on: ubuntu-latest
+        runs-on: self-hosted
         steps:
             - name: Code Checkout
               uses: actions/checkout@v7
@@ -28,4 +28,4 @@ jobs:
             - name: Deploy the containers with Docker Compose
               run: |
                 docker compose pull
-                docker compose up -d
+                docker compose up -d --no-build
